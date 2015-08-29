@@ -20,18 +20,34 @@ treeHuff_t creat_treeHuff_t()
 
 void add_to_chain(treeHuff_t root,treeHuff_t temp)
 {
-	temp->next = root->next;
-	root->next->prev = temp;
-	root->next = temp;
-	temp->prev = root;
+	if(root->next == NULL)
+	{
+		root->next = temp;
+		temp->prev = root;
+	}
+	else
+	{
+		temp->next = root->next;
+		root->next->prev = temp;
+		root->next = temp;
+		temp->prev = root;
+	}
 }
 
 void delete_from_chain(treeHuff_t temp)
 {
-	temp->prev->next = temp->next;
-	temp->next->prev = temp->prev;
-	temp->next = NULL;
-	temp->prev = NULL;
+	if(temp->next == NULL)
+	{
+		temp->prev->next = NULL;
+		temp->prev = NULL;
+	}
+	else
+	{
+		temp->prev->next = temp->next;
+		temp->next->prev = temp->prev;
+		temp->next = NULL;
+		temp->prev = NULL;
+	}
 }
 
 void myFree(treeHuff_t root)

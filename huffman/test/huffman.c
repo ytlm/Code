@@ -1,20 +1,5 @@
 #include "chain.h"
 
-struct node
-{
-	char ch;
-	int value;
-	struct node * lch;
-	struct node * rch;
-	struct node * next;
-	struct node * prev;
-};
-
-struct codehuff
-{
-	char code[N];
-};
-
 static int init_count(const char * inFilename,int * count);
 
 static int creat_huffman_tree(treeHuff_t ,int * count);
@@ -130,8 +115,8 @@ void mselect(treeHuff_t root,treeHuff_t * s1,treeHuff_t * s2)
 	int p1 = INT_MAX;
 	int p2 = INT_MAX;
 	treeHuff_t cur;
-	cur = root;
-	while(cur->next != NULL)
+	cur = root->next;
+	while(cur!= NULL)
 	{
 		if(cur->value < p1)
 		{
@@ -145,6 +130,7 @@ void mselect(treeHuff_t root,treeHuff_t * s1,treeHuff_t * s2)
 			*s2 = cur;
 			p2 = cur->value;
 		}
+		cur = cur->next;
 	}
 }
 
@@ -156,17 +142,16 @@ void creat_huffman_code(treeHuff_t root,codeHuff_t * huffc,int index,char *str_t
 		str_temp[index+1] = '\0';
 		creat_huffman_code(root->lch,huffc,index+1,str_temp);
 	}
-	else if(root->rch != NULL)
+	if(root->rch != NULL)
 	{
 		str_temp[index] = '1';
 		str_temp[index+1] = '\0';
 		creat_huffman_code(root->rch,huffc,index+1,str_temp);
 	}
-	else
+	if(root->lch == NULL && root->rch == NULL)	
 	{
 		str_temp[index] = '\0';
-		strcpy(huffc[(int)root->value].code,str_temp);
-		return;
+		strcpy(huffc[(int)root->ch].code,str_temp);
 	}
 }
 
@@ -194,7 +179,7 @@ int write_huffcode_to_file(const char * inFilename,const char * outFilename,code
 	{
 		if(count[i] == 0)
 			continue;
-		sprintf(value,"%c %d\n",i,count[i]);
+		sprintf(value,"%d %d\n",i,count[i]);
 		len = strlen(value);
 		wl = write(outfd,value,len);
 		if(wl != len)
@@ -332,40 +317,9 @@ int read_count(const int infd, int * count)
 	len = 0;
 	char value[N];
 	char buf[10];
+	int index_temp;
+	int i;
 
-	rl = read(infd,buf,1);
-	if(rl != 1)
-	{
-		fprintf(stderr,"read file erro\n");
-		perror("an error occur");
-		return -1;
-	}
-	if(buf[0] == '\n')
-	{
-		value[len++] = buf[0];
-		while((rl = read(infd,buf,1)) > 0)
-		{
-			if(buf[0] == '\n')
-			{
-				value[len] = '\0';
-				count[(int)value[0]] = myAtoi(value+2);
-				len = 0;
-				break;
-			}
-			else
-				value[len++] = buf[0];
-		}
-		if(rl == -1)
-		{
-			fprintf(stderr,"read file erro\n");
-			perror("an error occur");
-			return -1;
-		}
-
-	}
-	else
-		value[len++] = buf[0];
-	
 	while((rl = read(infd,buf,1)) > 0)
 	{
 		if(buf[0] == '\n')
@@ -375,7 +329,9 @@ int read_count(const int infd, int * count)
 				return 1;
 			else
 			{
-				count[(int)value[0]] = myAtoi(value+2);
+				index_temp = myAtoi(value);
+				for(i = 0; value[i] != '\0' && value[i] != ' ' ; i++);
+				count[index_temp] = myAtoi(value+i+1);
 				len = 0;
 			}
 		}
@@ -394,8 +350,10 @@ int read_count(const int infd, int * count)
 int myAtoi(char *s)
 {
 	int ans = 0;
-	while(*s)
+	while(1)
 	{
+		if(*s == ' ' || *s == '\0')
+			break;
 		ans = ans*10+(*s)-'0';
 		s++;
 	}

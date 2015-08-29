@@ -13,8 +13,23 @@
 
 #define N 256
 
+struct node
+{
+	char ch;
+	int value;
+	struct node * lch;
+	struct node * rch;
+	struct node * next;
+	struct node * prev;
+};
+
 typedef struct node * treeHuff_t;
 typedef struct node codeTreeHuff_t;
+
+struct codehuff
+{
+	char code[N];
+};
 
 typedef struct codehuff codeHuff_t;
 
