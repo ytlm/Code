@@ -196,7 +196,7 @@ int write_huffcode_file(const char * inFilename,const char * outFilename,codeHuf
 	{
 		if(count[i] == 0)
 			continue;
-		sprintf(buf,"%c %d\n",i,count[i]);
+		sprintf(buf,"%d %d\n",i,count[i]);
 		len = strlen(buf);
 		wl = write(outfd,buf,len);
 		if(wl != len)
@@ -288,10 +288,13 @@ int decode(const char *inFilename,const char *outFilename)
 int matoi(char * s)
 {
 	int ans = 0;
-	int i;
-	for(i = 0; s[i]; i++)
-		ans = ans*10 + s[i]-'0';
-
+	while(1)
+	{
+		if(*s == ' ' || *s == '\0')
+			break;
+		ans = ans*10+(*s - '0');
+		s++;
+	}
 	return ans;
 }
 int read_init_count(const int infd,int *count)
@@ -299,42 +302,10 @@ int read_init_count(const int infd,int *count)
 	char buf[10];
 	char value[SIZE];
 	int len = 0;
-	int wl;
-	wl = read(infd,buf,1);
-	if(wl != 1)
-	{
-		perror("read file error");
-		exit(1);
-	}
-	if(buf[0] == '\n')
-	{
-		value[len++] = buf[0];
-		while((wl = read(infd,buf,1)) > 0)
-		{
-			if(wl != 1)
-			{
-				perror("read file error");
-				exit(1);
-			}
-			if(buf[0] == '\n')
-				break;
-			value[len++] = buf[0];
-		}
-		if(wl == -1)
-		{
-			perror("read fle error");
-			exit(1);
-		}
-		value[len] = '\0';
+	int rl;
+	int i,index_temp;
 
-		count[(int)value[0]] = matoi(value+2);
-
-		len = 0;
-	}
-	else
-		value[len++] = buf[0];
-		
-	while((wl = read(infd,buf,1)) > 0)
+	while((rl = read(infd,buf,1)) > 0)
 	{
 		if(buf[0] == '\n')
 		{
@@ -344,14 +315,17 @@ int read_init_count(const int infd,int *count)
 			else
 			{
 				len = 0;
-				count[(int)value[0]] = matoi(value+2);
+				index_temp = matoi(value);
+				for(i = 0; value[i] != ' ' && value != '\0'; i++);
+
+				count[index_temp] = matoi(value+i+1);
 			}
 		}
 		else
 			value[len++] = buf[0];
 
 	}
-	if(wl == -1)
+	if(rl == -1)
 	{
 		perror("read file error");
 		return -1;
