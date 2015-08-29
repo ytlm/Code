@@ -7,7 +7,7 @@
 #include <fcntl.h>
 #include <unistd.h>
 
-#define SIZE 10000
+#define SIZE 1000
 #define N 256
 
 typedef struct hufftree treeHuff;
