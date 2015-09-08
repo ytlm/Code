@@ -1,0 +1,4 @@
+#shell
+
+模拟shell写的一个简单的shell实现，
+并加入readline实现简单的命令历史记录查询和补全
