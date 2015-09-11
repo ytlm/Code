@@ -14,6 +14,7 @@
 
 int print_prompt(char **buf);
 void get_command(char *buf);
+void strReplace(char *,char *,char *);
 
 char *order[ORDER_SIZE] = {NULL};
 struct passwd *user;
@@ -40,15 +41,15 @@ int main(int argc, char *argv[])
 		
 		if(strcmp(order[0],"cd") == 0)
 		{
-			if(strcmp(order[1],"~") == 0)
+			char tempStr[BUFFSIZE];
+			strcpy(tempStr,order[1]);
+
+			strReplace(tempStr,"~",user->pw_dir);
+
+			if(chdir(tempStr) == -1)
 			{
-				if(chdir(user->pw_dir) == -1)
-					perror("chdir error");
-			}
-			else
-			{
-				if(chdir(order[1]) == -1)
-					perror("chdir error");
+				fprintf(stderr,"chdir '%s' error\n", tempStr);
+				perror("chdir error");
 			}
 			continue;
 		}
@@ -61,6 +62,7 @@ int main(int argc, char *argv[])
 		{
 			if(execvp(order[0],order) == -1)
 			{
+				fprintf(stderr,"executive order '%s' error\n",order[0]);
 				perror("execvp error");
 				exit(EXIT_FAILURE);
 			}
@@ -102,17 +104,41 @@ int print_prompt(char **buf)
 		perror("gethostname error");
 		return -1;
 	}
-	strcat(prompt,"[MYSHELL]-");
 	strcat(prompt,user->pw_name);
 	strcat(prompt,"&&");
 	strcat(prompt,hostname);
-	strcat(prompt,"-");
+	strcat(prompt,"%:");
 	strcat(prompt,pathname);
 	strcat(prompt,"$>> ");
+	
+	strReplace(prompt,user->pw_dir,"~");
 
 	*buf = readline(prompt);
 	free(pathname);
 	return 1;
+}
+
+void strReplace(char *soucerStr,char *matchStr,char *repalceStr)
+{
+	int len_matchStr;
+	char *temp1,*temp2;
+
+	if((temp1 = strstr(soucerStr,matchStr)) == NULL)
+		return ;
+	char str_new[BUFFSIZE];
+	memset(str_new,0,sizeof(str_new));
+
+	len_matchStr = strlen(matchStr);
+
+	temp2 = temp1 + len_matchStr;
+
+	*temp1 = '\0';
+
+	strcat(str_new,soucerStr);
+	strcat(str_new,repalceStr);
+	strcat(str_new,temp2);
+
+	strcpy(soucerStr,str_new);
 }
 
 void get_command(char *buf)
