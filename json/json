@@ -1,0 +1,19 @@
+{
+	"height":178,
+	"total":567.32,
+	"id":"124115041004",
+	"score":
+	[
+		"this is my score",
+		[
+			{
+				"health":
+				{
+					"pingang":90,
+					"basketball":80,
+					"score":10
+				}
+			}
+		],
+	],
+}
