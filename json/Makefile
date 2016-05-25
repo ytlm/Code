@@ -2,7 +2,7 @@ CC = gcc
 CFLAGS = -Wall -g
 LIB = -lm
 
-OBJECT = main.o cjson.o readFile.o
+OBJECT = main.o cjson.o readFile.o myerror.o
 
 all:main
 
