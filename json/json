@@ -4,16 +4,22 @@
 	"id":"124115041004",
 	"score":
 	[
-		"this is my score",
-		[
-			{
-				"health":
+		{
+			"this is my score":
+			[
 				{
-					"pingang":90,
-					"basketball":80,
-					"score":10
+					"health":
+					{
+						"pingang":90,
+						"basketball":80,
+						"socre":10
+					}
 				}
-			}
-		],
+			]
+		}
 	],
+	"mm":
+	{
+		"aa":"bb"	
+	}
 }
