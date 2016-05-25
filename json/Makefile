@@ -1,20 +1,16 @@
+CC = gcc
 CFLAGS = -Wall -g
+LIB = -lm
 
 OBJECT = main.o cjson.o readFile.o
 
 all:main
 
 main:$(OBJECT)
-	gcc $(CFLAGS) -o $@ $^
+	$(CC) $(CFLAGS) -o $@ $^ $(LIB)
 
-main.o:main.c
-	gcc $(CFLAGS) -o $@ -c $^
-
-cjson.o:cjson.c
-	gcc $(CFLAGS) -o $@ -c $^
-
-readFile.o:readFile.c
-	gcc $(CFLAGS) -o $@ -c $^
+.c.o:
+	$(CC) $(CFLAGS) -o $@ -c $^ $(LIB)
 
 clean:
-	rm main $(OBJECT)
+	rm -rf main $(OBJECT)
