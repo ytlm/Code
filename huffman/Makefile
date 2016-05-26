@@ -12,4 +12,4 @@ huffman.o:huffman.c
 	gcc $(FLAGS) -o $@ -c $^
 
 clean:
-	rm *.o main
+	rm -rf *.o main
