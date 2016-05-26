@@ -11,6 +11,11 @@ int main(int argc,char *argv[])
 //	memset(inFilename,0,sizeof(inFilename));
 //	memset(outFilename,0,sizeof(outFilename));
 	
+	if(argc < 4) {
+		usePage();
+		exit(1);
+	}
+
 	while((ch = getopt(argc,argv,"edi:o:")) !=-1)
 	{
 		switch(ch)
