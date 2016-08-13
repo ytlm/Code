@@ -1,2 +1,2 @@
-# myCode
-平时自己写的一些简单的代码，备份一下，以便以后找得到
+# Code
+Back about usualy code
