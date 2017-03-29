@@ -1,2 +1,2 @@
 # Code
-Back about usualy code
+back up the usual code
