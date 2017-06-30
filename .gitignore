@@ -1,5 +1,6 @@
 # Object files
 *.o
+*.os
 *.ko
 *.obj
 *.elf
@@ -13,6 +14,8 @@
 *.a
 *.la
 *.lo
+*.def
+*.exp
 
 # Shared objects (inc. Windows DLLs)
 *.dll
@@ -30,3 +33,27 @@
 
 # Debug files
 *.dSYM/
+
+# Compiled Lua sources
+luac.out
+
+# luarocks build files
+*.src.rock
+*.zip
+*.tar.gz
+
+# erlang
+.eunit
+deps
+*.o
+*.beam
+*.plt
+erl_crash.dump
+ebin
+rel/example_project
+.concrete/DEV_MODE
+.rebar
+
+
+erlang/ports/example1
+erlang/ports/example1_drv.so
