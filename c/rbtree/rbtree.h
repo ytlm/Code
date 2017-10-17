@@ -9,13 +9,13 @@
  *
  * */
 
-#ifndef _RBTREE_H_
-#define _RBTREE_H_
-
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
 #include <math.h>
+
+#ifndef _RBTREE_H_
+#define _RBTREE_H_
 
 #define     RED     1
 #define     BLACK   0
@@ -74,6 +74,5 @@ rbtree_node_t* rbtree_find_node(rbtree_node_t *root, rbtree_node_t *sentinel, rb
 rbtree_node_t* rbtree_max_node(rbtree_node_t *node, rbtree_node_t *sentinel);
 
 void rbtree_print(rbtree_node_t *root, rbtree_node_t *sentinel);
-void rbtree_verify(rbtree_t *tree);
 
 #endif /* _RBTREE_H_ */

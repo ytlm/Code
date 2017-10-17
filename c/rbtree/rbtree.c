@@ -179,66 +179,6 @@ void rbtree_print(rbtree_node_t *root, rbtree_node_t *sentinel)
     }
 }
 
-static void rbtree_heighth(rbtree_node_t *node, rbtree_node_t *sentinel, int cch, int *th)
-{
-    int tth;
-
-    tth = *th;
-
-    if (node == sentinel) {
-        if (!rbtree_is_black(node)) {
-            printf("sentinel node is not black !!!\n");
-            return;
-        }
-        cch++;
-        if (tth == 0) {
-            tth = cch;
-            *th = tth;
-        } else if (cch != tth) {
-            printf("black node num on the sentinel is not equal !!!, current : %d, total : %d \n", cch, tth);
-            return ;
-        }
-        return;
-    }
-
-    if (rbtree_is_black(node)) {
-        cch++;
-    } else if (rbtree_is_red(node)) {
-        if (!rbtree_is_black(node->left) || !rbtree_is_black(node->right)) {
-            printf("red node dose't has black child !!!\n");
-            return ;
-        }
-    } else {
-        printf("node color is not RED or BLACK!!!, key : %d\n", node->key);
-        return ;
-    }
-
-    rbtree_heighth(node->left, sentinel, cch, th);
-    rbtree_heighth(node->right, sentinel, cch, th);
-}
-
-void rbtree_verify(rbtree_t *tree)
-{
-    int th = 0;
-
-    rbtree_node_t *root, *sentinel;
-
-    root = tree->root;
-
-    sentinel = tree->sentinel;
-
-    if (rbtree_is_black(root)) {
-        return rbtree_heighth(root, sentinel, 0, &th);
-    } else {
-        if (rbtree_is_red(root)) {
-            printf("root color is RED !!!\n");
-        } else {
-            printf("node color is not RED or BLACK!!!, key : %d\n", root->key);
-        }
-    }
-    return ;
-}
-
 static rbtree_node_t* rbtree_create_node()
 {
     rbtree_node_t *node;
