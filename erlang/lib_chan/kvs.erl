@@ -25,3 +25,9 @@ loop() ->
             loop()
     end.
 
+%%
+%% kvs:start().
+%%
+%% rpc:call(server@centos, kvs, store, [weather, fine]).
+%% rpc:call(server@centos, kvs, lookup, [weather]).
+%%
