@@ -4,7 +4,7 @@ all: compile
 
 ERLC = erlc
 
-ERL = erl -boot start_clean
+ERL = erl -boot start_clean -pa /home/ytl/code/erlang/lib_chan/
 
 MODS = chat_client chat_group chat_server io_widget \
 	   mod_chat_controller
@@ -24,3 +24,9 @@ chat_client:
 
 clean:
 	rm -rf *.beam erl_crash.dump
+
+
+#
+# erl -pa /home/ytl/code/erlang/lib_chan/
+# chat_server:start().
+# chat_client:tert().
