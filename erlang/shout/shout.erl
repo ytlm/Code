@@ -66,7 +66,7 @@ play_songs(Socket, PidSongServer, SoFar) ->
 send_file(S, Header, Offset, Stop, Socket, SoFar) ->
     Need = ?CHUNKSIZE - size(SoFar),
     Last = Offset + Need,
-    if 
+    if
         Last >= Stop ->
             Max = Stop - Offset,
             {ok, Bin} = file:pread(S, Offset, Max),
@@ -120,7 +120,7 @@ songs() ->
 songs_loop(SongList) ->
     receive
         {From, random_song} ->
-            I = random:uniform(length(SongList)),
+            I = rand:uniform(length(SongList)),
             Song = lists:nth(I, SongList),
             From ! {self(), Song},
             songs_loop(SongList)
@@ -129,7 +129,7 @@ songs_loop(SongList) ->
 rpc(Pid, Q) ->
     Pid ! {self(), Q},
     receive
-        {Pid, Reply} -> 
+        {Pid, Reply} ->
             Reply
     end.
 

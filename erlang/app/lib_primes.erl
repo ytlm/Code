@@ -2,7 +2,7 @@
 -export([make_prime/1]).
 
 make_prime(1) ->
-    lists:nth(random:uniform(5), [1, 2, 3, 5, 7]);
+    lists:nth(rand:uniform(5), [1, 2, 3, 5, 7]);
 
 make_prime(K) when K > 0 ->
     new_seed(),
@@ -17,7 +17,7 @@ make_prime(K) when K > 0 ->
            make_prime(K)
     end.
 
-make_prime(0, _) -> 
+make_prime(0, _) ->
     exit(impossible);
 
 make_prime(K, P) ->
@@ -37,9 +37,9 @@ is_prime(D, Ntests) ->
 
 is_prime(0, _, _) -> true;
 is_prime(Ntest, N, Len) ->
-    K = random:uniform(Len),
+    K = rand:uniform(Len),
     A = make_random_init(K),
-    if 
+    if
         A < N ->
             case lib_lin:pow(A, N, N) of
                 A -> is_prime(Ntest - 1, N, Len);
@@ -55,10 +55,10 @@ make_random_init(N) ->
 
 make_random_init(0, D) -> D;
 make_random_init(N, D) ->
-    make_random_init(N - 1, D * 10 + (random:uniform(10) - 1)).
+    make_random_init(N - 1, D * 10 + (rand:uniform(10) - 1)).
 
 new_seed() ->
-    {_, _, X} = erlang:now(),
+    {_, _, X} = erlang:timestamp(),
     {H, M, S} = time(),
     H1 = H * X rem 32767,
     M1 = M * X rem 32767,

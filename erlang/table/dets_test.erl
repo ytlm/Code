@@ -1,5 +1,5 @@
 -module(dets_test).
--export([open/1, close/0, test/0, filename2index/1, index2filename/1]).
+-export([open/1, close/0, filename2index/1, index2filename/1]).
 
 open(File) ->
     io:format("dets opened : ~p~n", [File]),

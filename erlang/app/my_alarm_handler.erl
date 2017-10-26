@@ -2,7 +2,7 @@
 -behaviour(gen_event).
 
 -export([init/1, handle_event/2,
-         handle_call/2, handle_info/2, 
+         handle_call/2, handle_info/2,
          terminate/2]).
 
 init(Args) ->
@@ -26,6 +26,3 @@ handle_call(_Request, N) -> Reply = N, {ok, N, N}.
 handle_info(_Info, N) -> {ok, N}.
 
 terminate(_Reason, N) -> ok.
-
-
-

@@ -7,7 +7,7 @@
          set_title/2, insert_str/2, update_state/3]).
 
 start(Pid) ->
-    gs:start(),
+    wx:new(),
     spawn_link(fun() -> widget(Pid) end).
 
 get_state(Pid)           -> rpc(Pid, get_state).
@@ -27,17 +27,17 @@ rpc(Pid, Q) ->
 
 widget(Pid) ->
     Size = [{width, 500}, {height, 200}],
-    Win  = gs:window(gs:start(),
+    Win  = wx:window(wx:new(),
                      [{map, true}, {configure, true}, {title, "window"}|Size]),
-    gs:frame(packer, Win, [{packer_x, [{stretch, 1, 500}]},
+    wx:frame(packer, Win, [{packer_x, [{stretch, 1, 500}]},
                            {packer_y, [{stretch, 10, 120, 100},
                                        {stretch, 1, 15, 15}]}]),
-    gs:create(editor, editor, packer, [{pack_x, 1}, {pack_y, 1}, {vscroll, right}]),
-    gs:create(entry, entry, packer,   [{pack_x, 1}, {pack_y, 2}, {keypress, true}]),
-    gs:config(packer, Size),
+    wx:create(editor, editor, packer, [{pack_x, 1}, {pack_y, 1}, {vscroll, right}]),
+    wx:create(entry, entry, packer,   [{pack_x, 1}, {pack_y, 2}, {keypress, true}]),
+    wx:config(packer, Size),
     Prompt = " > ",
     State  = nil,
-    gs:config(entry, {insert, {0, Prompt}}),
+    wx:config(entry, {insert, {0, Prompt}}),
     loop(Win, Pid, Prompt, State, fun parse/1).
 
 loop(Win, Pid, Prompt, State, Parse) ->
@@ -48,29 +48,29 @@ loop(Win, Pid, Prompt, State, Parse) ->
         {handler, Fun} ->
             loop(Win, Pid, Prompt, State, Fun);
         {prompt, Str} ->
-            gs:config(entry, {delete, {0, last}}),
-            gs:config(entry, {insert, {0, Str}}),
+            wx:config(entry, {delete, {0, last}}),
+            wx:config(entry, {insert, {0, Str}}),
             loop(Win, Pid, Str, State, Parse);
         {state, S} ->
             loop(Win, Pid, Prompt, S, Parse);
         {title, Str} ->
-            gs:config(Win, [{title, Str}]),
+            wx:config(Win, [{title, Str}]),
             loop(Win, Pid, Prompt, State, Parse);
         {insert, Str} ->
-            gs:config(editor, {insert, {'end', Str}}),
+            wx:config(editor, {insert, {'end', Str}}),
             scroll_to_show_last_line(),
             loop(Win, Pid, Prompt, State, Parse);
         {updateState, N, X} ->
             io:format("setelemtn N = ~p, X = ~p Stte = ~p~n", [N, X, State]),
             State1 = setelement(N, State, X),
             loop(Win, Pid, Prompt, State1, Parse);
-        {gs, _, destroy, _, _} ->
+        {wx, _, destroy, _, _} ->
             io:format("Destroyed~n", []),
             exit(windowDestroyed);
-        {gs, entry, keypress, _, ['Return'|_]} ->
-            Text = gs:read(entry, text),
-            gs:config(entry, {delete, {0, last}}),
-            gs:config(entry, {insert, {0, Prompt}}),
+        {wx, entry, keypress, _, ['Return'|_]} ->
+            Text = wx:read(entry, text),
+            wx:config(entry, {delete, {0, last}}),
+            wx:config(entry, {insert, {0, Prompt}}),
             try Parse(Text) of
                 Term ->
                     Pid ! {self(), State, Term}
@@ -79,10 +79,10 @@ loop(Win, Pid, Prompt, State, Parse) ->
                     self() ! {insert, " ** bad input ** \n ** /h for help\n"}
             end,
             loop(Win, Pid, Prompt, State, Parse);
-        {gs, _, configure, [], [W, H, _, _]} ->
-            gs:config(packer, [{width, W}, {height, H}]),
+        {wx, _, configure, [], [W, H, _, _]} ->
+            wx:config(packer, [{width, W}, {height, H}]),
             loop(Win, Pid, Prompt, State, Parse);
-        {gs, entry, keypress, _, _} ->
+        {wx, entry, keypress, _, _} ->
             loop(Win, Pid, Prompt, State, Parse);
         Any ->
             io:format("Discarded : ~p~n", [Any]),
@@ -90,18 +90,18 @@ loop(Win, Pid, Prompt, State, Parse) ->
     end.
 
 scroll_to_show_last_line() ->
-    Size       = gs:read(editor, size),
-    Height     = gs:read(editor, height),
-    CharHeight = gs:read(editor, char_height),
+    Size       = wx:read(editor, size),
+    Height     = wx:read(editor, height),
+    CharHeight = wx:read(editor, char_height),
     TopRow     = Size - Height / CharHeight,
-    if TopRow > 0 -> gs:config(editor, {vscrollpos, TopRow});
-       true       -> gs:config(editor, {vscrollpos, 0})
+    if TopRow > 0 -> wx:config(editor, {vscrollpos, TopRow});
+       true       -> wx:config(editor, {vscrollpos, 0})
     end.
 
 test() ->
     spawn(fun() -> test1() end).
 
-test1() -> 
+test1() ->
     W = io_widget:start(self()),
     io_widget:set_title(W, "Test Window"),
     loop(W).
@@ -116,6 +116,3 @@ loop(W) ->
 
 parse(Str) ->
     {str, Str}.
-
-
-
