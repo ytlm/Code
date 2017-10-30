@@ -4,8 +4,9 @@
 -export([start/0, start_in_shell_for_testing/0, start_link/1,
          init/1]).
 
-start() -> 
-    spawn(fun() -> 
+start() ->
+
+    spawn(fun() ->
                   supervisor:start_link({local, ?MODULE}, ?MODULE, _Arg = [])
           end).
 
@@ -35,3 +36,11 @@ init([]) ->
              [prime_server]}
            ]}}.
 
+%%
+%% {tag, {Mod, Func, ArgList}, Restart, Shutdown, Type, [Mode1]}
+%%
+%% Restart = permanent | transient | tempory
+%% Shutdown = 终止时间
+%% Type = worker | supervisor
+%%
+%%

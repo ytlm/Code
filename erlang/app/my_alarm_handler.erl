@@ -26,3 +26,10 @@ handle_call(_Request, N) -> Reply = N, {ok, N, N}.
 handle_info(_Info, N) -> {ok, N}.
 
 terminate(_Reason, N) -> ok.
+
+%%
+%% alarm_handler:set_alarm(tooHot).
+%% gen_event:swap_handler(alarm_handler, {alarm_handler, swap}, {my_alarm_handler, xyz}).
+%% alarm_handler:set_alarm(tooHot).
+%% alarm_handler:clear_alarm(tooHot).
+%%
