@@ -1,7 +1,7 @@
--module(my_fac_server).
+-module(fac_server).
 -export([loop/0]).
 
-loop() -> 
+loop() ->
     receive
         {From, {fac, N}} ->
             From ! {self(), fac(N)},

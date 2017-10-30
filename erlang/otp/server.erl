@@ -1,4 +1,4 @@
--module(server4).
+-module(server).
 -export([start/2, rpc/2, swap_code/2]).
 
 start(Name, Mod) ->
@@ -15,16 +15,15 @@ rpc(Name, Request) ->
 
 loop(Name, Mod, OldState) ->
     receive
-        {From, {swap_code, NewCallbackMod}} ->
+        {From, {swap_code, NewCallBackMod}} ->
             From ! {Name, ok, ack},
-            loop(Name, NewCallbackMod, OldState);
+            loop(Name, NewCallBackMod, OldState);
         {From, Request} ->
             try Mod:handle(Request, OldState) of
-                {Response, NewState} ->
-                    From ! {Name, ok, Response},
-                    loop(Name, Mod, NewState)
+                {Response, NewState} -> From ! {Name, ok, Response},
+                                        loop(Name, Mod, NewState)
             catch
-                _: Why ->
+                _:Why ->
                     log_the_error(Name, Request, Why),
                     From ! {Name, crash},
                     loop(Name, Mod, OldState)
@@ -32,6 +31,6 @@ loop(Name, Mod, OldState) ->
     end.
 
 log_the_error(Name, Request, Why) ->
-    io:format("server ~p request ~p~n"
-              "caused expection ~p~n",
+    io:format("Server ~p request ~p~n"
+              "caused exception ~p~n",
               [Name, Request, Why]).

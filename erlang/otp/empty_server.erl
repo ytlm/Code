@@ -1,4 +1,5 @@
--module(server5).
+-module(empty_server).
+
 -export([start/0, rpc/2]).
 
 start() -> spawn(fun() -> wait() end).
@@ -13,4 +14,3 @@ rpc(Pid, Q) ->
     receive
         {Pid, Reply} -> Reply
     end.
-

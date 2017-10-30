@@ -4,7 +4,7 @@ all: compile
 
 ERLC = erlc +debug_info
 
-MODS = fac_server name_server server empty_server
+MODS = fac_server name_server server empty_server bank
 
 .erl.beam:
 	${ERLC} -W $<
