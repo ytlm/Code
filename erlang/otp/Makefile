@@ -2,10 +2,9 @@
 
 all: compile
 
-ERLC = erlc
+ERLC = erlc +debug_info
 
-MODS = my_fac_server name_server name_server1 new_name_server \
-	   server1 server2 server3 server4 server5
+MODS = fac_server name_server server empty_server
 
 .erl.beam:
 	${ERLC} -W $<
@@ -16,3 +15,14 @@ compile: ${MODS:%=%.beam}
 
 clean:
 	rm -rf *.beam erl_crash.dump
+
+
+#
+# server:start(name_server, name_server).
+# name_server:add(joe, "at home").
+# name_server:whereis(joe).
+#
+# Pid = empty_server:start().
+# Pid ! {become, fun fac_server:loop/0}.
+# empty_server:rpc(Pid, {fac, 30}).
+#

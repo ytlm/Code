@@ -1,10 +1,12 @@
 .SUFFIXES: .erl .beam .yrl
 
+ERLC = erlc +debug_info
+
 CC = gcc
 OPS = -std=c99
 
 .erl.beam:
-	erlc -W $<
+	${ERLC} -W $<
 
 MODS = example1 example1_lid
 

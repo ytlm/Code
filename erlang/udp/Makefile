@@ -2,7 +2,7 @@
 
 all: compile
 
-ERLC = erlc
+ERLC = erlc +debug_info
 
 MODS = udp broadcast
 

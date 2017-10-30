@@ -1,10 +1,12 @@
 .SUFFIXES: .erl .beam
 
+ERLC = erlc +debuginfo
+
 .erl.beam:
-	erlc -W $<
+	${ERLC} -W $<
 
 .yrl.erl:
-	erlc -W $<
+	${ERLC} -W $<
 
 ERL = erl -boot start_clean
 

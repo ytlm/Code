@@ -2,7 +2,7 @@
 
 all: compile
 
-ERLC = erlc
+ERLC = erlc +debug_info
 
 ERL = erl -boot start_clean
 
@@ -25,4 +25,10 @@ clean:
 # erl -boot start_sasl -config elog4.config
 # application:start(sellaprime).
 # lib_primes:make_prime(10).
+#
+# application:loaded_applications().
+# application:load(sellaprime).
+# application:start(sellaprime).
+# application:stop(sellaprime).
+# application:unload(sellaprime).
 #

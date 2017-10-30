@@ -2,7 +2,7 @@
 
 all: compile
 
-ERLC = erlc
+ERLC = erlc +debug_info
 
 MODS = kvs mode_name_server lib_chan lib_chan_cs lib_chan_mm lib_chan_auth
 

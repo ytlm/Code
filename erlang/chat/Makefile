@@ -2,7 +2,7 @@
 
 all: compile
 
-ERLC = erlc
+ERLC = erlc +debug_info
 
 ERL = erl -boot start_clean -pa /home/ytl/code/erlang/lib_chan/
 
