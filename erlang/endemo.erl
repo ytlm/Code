@@ -19,19 +19,19 @@ b(A, Bool) ->
     wait(b).
 
 c(B, M) ->
-    link(B), 
+    link(B),
     case M of
         {die, Reason} ->
             exit(Reason);
         {divide, N} ->
-            1/N,
+            _ = 1/N,
             wait(c);
         normal ->
             true
     end.
 
 wait(Prog) ->
-    receive 
+    receive
         Any ->
             io:format("Process ~p received ~p~n", [Prog, Any]),
             wait(Prog)
