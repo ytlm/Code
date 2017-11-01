@@ -103,7 +103,7 @@ parse_v1_tag(<<$T, $A, $G, B/binary>>) ->
     {Album, B3}   = split_binary(B2, 30),
     {_Year, B4}   = split_binary(B3, 30),
     {_Comment, <<K, Track, _Gendre>>} = split_binary(B4, 28),
-    L = [{title, trim(Title)}, {artist, trim(Artist)}, {album, trim(Album)}],
+    L = [{title, lib_misc:trim(Title)}, {artist, lib_misc:trim(Artist)}, {album, lib_misc:trim(Album)}],
     case K of
         0 ->
             {"ID3v1.1", [{track, Track} | L]};
@@ -112,12 +112,3 @@ parse_v1_tag(<<$T, $A, $G, B/binary>>) ->
     end;
 parse_v1_tag(_) ->
     no.
-
-trim(Bin) ->
-    list_to_binary(trim_blanks(binary_to_list(Bin))).
-
-trim_blanks(X) -> reverse(skip_blanks_and_zero(reverse(X))).
-
-skip_blanks_and_zero([$\s | T]) -> skip_blanks_and_zero(T);
-skip_blanks_and_zero([0 | T])   -> skip_blanks_and_zero(T);
-skip_blanks_and_zero(X)         -> X.

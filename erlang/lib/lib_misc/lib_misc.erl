@@ -1,11 +1,22 @@
 -module(lib_misc).
+
+-import(lists, [all/2, any/2, filter/2, reverse/1, reverse/2,
+                foreach/2, map/2, member/2, sort/1]).
+
 -export([string2value/1, sleep/1, random_seed/0,
-		 dump/2]).
+		 dump/2, trim/1]).
 
 string2value(L) -> string2value(L, []).
 string2value([], N) -> list_to_tuple(lists:reverse(N));
 string2value([H|T], N) -> string2value(T, [H|N]).
 
+trim(Bin) -> list_to_binary(trim_blanks(binary_to_list(Bin))).
+
+trim_blanks(X) -> reverse(skip_blanks_and_zero(reverse(X))).
+
+skip_blanks_and_zero([$\s | T]) -> skip_blanks_and_zero(T);
+skip_blanks_and_zero([0 | T])   -> skip_blanks_and_zero(T);
+skip_blanks_and_zero(X)         -> X.
 
 sleep(T) ->
     receive

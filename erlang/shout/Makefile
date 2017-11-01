@@ -6,7 +6,7 @@ ERL = erl -boot start_clean -pa ../lib -pa ../lib/lib_misc
 
 ERLC = erlc +debug_info
 
-MODS = shout mp3_manager
+MODS = shout mp3_manager id3_tag_lengths mp3_sync
 
 .erl.beam:
 	${ERLC} -W $<
@@ -20,3 +20,9 @@ mp3:
 
 clean:
 	rm -rf *.beam erl_crash.dump
+
+#
+# make && make mp3
+# shout:start().
+# xmms http://127.0.0.1:3000
+#
