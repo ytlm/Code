@@ -1,39 +1,43 @@
 -module(server).
--export([start_nano_server/0]).
-% -export([start_seq_server/0]).
-% -export([start_parallel_server/0]).
+-export([start_nano_server/0,
+        start_seq_server/0,
+        start_parallel_server/0]).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% start_parallel_server() ->
-%     {ok, Listen} = gen_tcp:listen(2345, [binary, {packet, 4},
-%                                          {reuseaddr, true},
-%                                          {active, true}]),
-%     spawn(fun() -> par_connect(Listen) end).
-% 
-% par_connect(Listen) ->
-%     {ok, Socket} = gen_tcp:accept(Listen),
-%     spawn(fun() -> par_connect(Listen) end),
-%     loop(Socket).
+listen() ->
+    gen_tcp:listen(2345, [binary, {packet, 4},
+                          {reuseaddr, true},
+                          {active, true}]).
 
+%%
+%% parallel server
+%%
+start_parallel_server() ->
+    {ok, Listen} = listen(),
+    spawn(fun() -> par_connect(Listen) end).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% start_seq_server() ->
-%     {ok, Listen} = gen_tcp:listen(2345, [binary, {packet, 4},
-%                                          {reuseaddr, true},
-%                                          {active, true}]),
-%     seq_loop(Listen).
-% 
-% seq_loop(Listen) ->
-%     {ok, Socket} = gen_tcp:accept(Listen),
-%     loop(Socket),
-%     seq_loop(Listen).
+par_connect(Listen) ->
+    {ok, Socket} = gen_tcp:accept(Listen),
+    spawn(fun() -> par_connect(Listen) end),
 
+    loop(Socket).
 
-%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%
+%% sequential server
+%%
+start_seq_server() ->
+    {ok, Listen} = listen(),
+    seq_loop(Listen).
+
+seq_loop(Listen) ->
+    {ok, Socket} = gen_tcp:accept(Listen),
+    loop(Socket),
+    seq_loop(Listen).
+
+%%
+%% simple one request server
+%%
 start_nano_server() ->
-    {ok, Listen} = gen_tcp:listen(2345, [binary, {packet, 4},
-                                         {reuseaddr, true},
-                                         {active, true}]),
+    {ok, Listen} = listen(),
     {ok, Socket} = gen_tcp:accept(Listen),
     gen_tcp:close(Listen),
     loop(Socket).

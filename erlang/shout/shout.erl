@@ -12,7 +12,10 @@ start() ->
           end).
 
 start_parallel_server(Port) ->
-    {ok, Listen} = gen_tcp:listen(Port, [binary, {packet, 0}, {reuseaddr, true}, {active, true}]),
+    {ok, Listen} = gen_tcp:listen(Port, [binary,
+                                         {packet, 0},
+                                         {reuseaddr, true},
+                                         {active, true}]),
     PidSongServer = spawn(fun() -> songs() end),
     spawn(fun() -> par_connect(Listen, PidSongServer) end).
 
@@ -113,9 +116,13 @@ response() ->
      "icy-br: 96\r\n\r\n"].
 
 songs() ->
-    {ok, [SongList]} = file:consult("mp3data"),
-    lib_misc:random_seed(),
-    songs_loop(SongList).
+    case file:consult("mp3data") of
+        {ok, [SongList]} ->
+            lib_misc:random_seed(),
+            songs_loop(SongList),
+            true;
+        {error, _Why} -> io:format("songs() file:consult() :~p~n", [_Why])
+    end.
 
 songs_loop(SongList) ->
     receive
@@ -134,7 +141,7 @@ rpc(Pid, Q) ->
     end.
 
 unpackt_song_descriptor({File, {_Tag, Info}}) ->
-    PrintStr = list_to_binary(make_header1(Info)),
+    PrintStr = list_to_binary(make_header(Info)),
     L1 = ["StreamTitle='", PrintStr,
           "';StreamUrl='http://localhost:3000';"],
     Bin = list_to_binary(L1),
@@ -144,9 +151,9 @@ unpackt_song_descriptor({File, {_Tag, Info}}) ->
     Header = list_to_binary([Nblocks, Bin, Extra]),
     {File, PrintStr, Header}.
 
-make_header1([{track, _}|T]) ->
-    make_header1(T);
-make_header1([{Tag, X}|T])->
-    [atom_to_list(Tag), ": ", X, " " | make_header1(T)];
-make_header1([]) -> [].
+make_header([{track, _}|T]) ->
+    make_header(T);
+make_header([{Tag, X}|T])->
+    [atom_to_list(Tag), ": ", X, " " | make_header(T)];
+make_header([]) -> [].
 

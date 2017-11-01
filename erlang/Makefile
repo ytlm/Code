@@ -21,7 +21,7 @@ subdirs:
 	cd app; make
 	cd chat; make
 	cd file; make
-	cd lib_chan; make
+	cd lib; make
 	cd otp; make
 	cd ports; make
 	cd shout; make
@@ -36,7 +36,7 @@ clean:
 	cd app; make clean
 	cd chat; make clean
 	cd file; make clean
-	cd lib_chan; make clean
+	cd lib; make clean
 	cd otp; make clean
 	cd ports; make clean
 	cd shout; make clean

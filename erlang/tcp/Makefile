@@ -4,7 +4,7 @@ all: compile
 
 ERLC = erlc +debug_info
 
-MODS = client lib_misc server socket
+MODS = client server socket
 
 .erl.beam:
 	${ERLC} -W $<
@@ -15,3 +15,8 @@ compile: ${MODS:%=%.beam}
 
 clean:
 	rm -rf *.beam erl_crash.dump
+
+
+#
+# erl -pa ../lib/lib_misc
+#

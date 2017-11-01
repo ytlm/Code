@@ -4,7 +4,7 @@ all: compile
 
 ERLC = erlc +debug_info
 
-ERL = erl -boot start_clean -pa /home/ytl/code/erlang/lib_chan/
+ERL = erl -boot start_clean -pa ../lib/lib_chan/
 
 MODS = chat_client chat_group chat_server io_widget \
 	   mod_chat_controller
@@ -27,6 +27,7 @@ clean:
 
 
 #
-# erl -pa /home/ytl/code/erlang/lib_chan/
+# erl -pa ../lib/lib_chan/
 # chat_server:start().
 # chat_client:tert().
+#
