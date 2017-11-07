@@ -1,22 +1,31 @@
 CC = gcc
 CFLAG = -Wall -g -O0
 
-MT_SO= mt.so
+target= mt.so main
 
 # multiple target
-all: $(MT_SO)
+all: $(target)
 
-CORE_LIB= mt.o
-
-.c.o:
+mt.o: mt.c
 	$(CC) $(CFLAG) -c $< -o $@ -fPIC
 
-$(MT_SO): $(CORE_LIB)
+mt.so: mt.o
 	$(CC) $(CFLAG) -shared -o $@ $<
+
+main.o: main.c
+	$(CC) $(CFLAG) -o $@ -c $<
+
+main: main.o
+	$(CC) $(CFLAG) -o $@ $< -llua -lm
 
 .PHONY:clean
 
 clean:
-	rm -rf $(CORE_LIB) $(MT_SO)
+	rm -rf $(target) *.o
 
 
+#
+# lua main.lua " lua call C function "
+#
+# ./main " C function call lua code "
+#
