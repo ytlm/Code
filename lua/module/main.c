@@ -11,7 +11,7 @@ int lua_add(lua_State *L, const char *fname, int x, int y) {
 
     int sum;
 
-    // (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0))
+    // if (luaL_loadfile(L, filename) || lua_pcall(L, 0, LUA_MULTRET, 0))
     if (luaL_dofile(L, fname)) {
         printf("Error Msg : %s\n", lua_tostring(L, -1));
         return -1;
@@ -46,6 +46,8 @@ void lua_getname(lua_State *L, const char *fname, const char **name){
     }
 
     *name = lua_tostring(L, -1);
+
+    lua_pop(L, -1);
 
     return ;
 }
