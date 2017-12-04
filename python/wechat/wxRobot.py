@@ -31,6 +31,6 @@ def tulingReplay(msg):
     return reply or defaultReplay
 
 
-if __name__ == '__main__'
+if __name__ == '__main__':
     itchat.auto_login(hotReload=True, enableCmdQR=2)
     itchat.run()
