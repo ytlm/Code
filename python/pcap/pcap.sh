@@ -9,7 +9,6 @@ err()
     echo "---8<------------------------------------------"
     cat $LOG
     echo "------------------------------------------>8---"
-    exit 1
 }
 
 run()
@@ -31,6 +30,8 @@ do
     run "curl -s -O $LINE"
     sleep 1
 done
+
+rm -rf $FILENAME $LOG
 
 # sh pcap.sh 'the content will save the current dir'
 
