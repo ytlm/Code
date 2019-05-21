@@ -12,15 +12,15 @@ SKIP_DB="information_schema"
 # SKIP_DB=""
 
 
-GZIP=$(which gzip)
+GZIP="$(which gzip) --fast"
 RMF="$(which rm) -f"
 MV=$(which mv)
 CHMOD="$(which chmod) 0400"
 
-MySql=$(which mysql)
-MySqlDump=$(which mysqldump)
+MySql="$(which mysql) -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PWD"
+MySqlDump="$(which mysqldump) --single-transaction --routines --quick -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PWD"
 
-DATABASES=$($MySql -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PWD -Bse "SHOW DATABASES;")
+DATABASES=$($MySql -Bse "SHOW DATABASES;")
 
 [ ! -d $BACKUP_DIR ] && mkdir -p $BACKUP_DIR
 
@@ -39,7 +39,7 @@ for dbname in $DATABASES; do
 
         [ -f $dbFileName ] && $MV "$dbFileName" "$dbFileName.old"
 
-        $MySqlDump --single-transaction --routines --quick -h $DB_HOST -P $DB_PORT -u $DB_USER -p$DB_PWD -B $dbname | $GZIP > "$dbFileName" && $RMF "${dbFileName}.old"
+        $MySqlDump -B $dbname | $GZIP > "$dbFileName" && $RMF "${dbFileName}.old"
 
         $CHMOD $dbFileName
     fi
