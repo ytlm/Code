@@ -9,7 +9,7 @@ DB_PWD="123456"
 BACKUP_DIR="/tmp/mysqlbackup"
 
 SKIP_DB="information_schema"
-# SKIP_DB=""
+# SKIP_DB="db1 db2"
 
 
 GZIP="$(which gzip) --fast"
