@@ -4,3 +4,4 @@
 * [bash](bash)
 * [python](python)
 * [erlang](erlang)
+* [perl](perl)
